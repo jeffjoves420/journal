@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f2a900;
+            --primary-dark: #d69900;
+            --bg-dark: #121212;
+            --card-dark: #1e1e1e;
+            --widget-dark: #252525;
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+            --positive: #27ae60;
+            --positive-dark: #219653;
+            --negative: #e74c3c;
+            --negative-dark: #c0392b;
+            --neutral: #f39c12;
+            --font-main: 'Inter', sans-serif;
+            
+            --background-color: var(--bg-dark);
+            --card-color: var(--card-dark);
+            --widget-color: var(--widget-dark);
+            --text-color: var(--text-light);
+            --text-secondary: var(--text-muted);
+            --border-color: var(--widget-dark);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .app-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card-dark {
+            background-color: var(--widget-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-top: 3px solid var(--primary);
+            height: 100%;
+        }
+
+        .card-dark.positive {
+            border-top-color: var(--positive);
+        }
+
+        .card-dark.negative {
+            border-top-color: var(--negative);
+        }
+
+        .title {
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0.8rem 0;
+        }
+
+        /* Main Cards */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn i {
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #121212;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(242, 169, 0, 0.1);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-negative {
+            background-color: var(--negative);
+            color: white;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 0.875rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--widget-color);
+            color: var(--text-color);
+            font-size: 0.875rem;
+            font-family: var(--font-main);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(242, 169, 0, 0.2);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            background-color: var(--widget-color);
+            position: sticky;
+            top: 0;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: rgba(242, 169, 0, 0.05);
+        }
+
+        .positive {
+            background-color: rgba(39, 174, 96, 0.1);
+        }
+
+        .negative {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .result {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .result-positive {
+            color: var(--positive);
+            background-color: rgba(39, 174, 96, 0.2);
+        }
+
+        .result-negative {
+            color: var(--negative);
+            background-color: rgba(231, 76, 60, 0.2);
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Filter Chips */
+        .filter-chips {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 0.5rem 1rem;
+            background-color: var(--widget-color);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .chip:hover {
+            background-color: rgba(242, 169, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .chip.active {
+            background-color: var(--primary);
+            color: #121212;
+            border-color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo Only -->
+    <header class="app-header">
+        <div class="app-logo">Journal</div>
+    </header>
+
+    <div class="container">
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="card-dark">
+                <div class="title">Total Trades</div>
+                <div class="value" id="totalTrades">0</div>
+            </div>
+            <div class="card-dark positive">
+                <div class="title">Win Rate</div>
+                <div class="value" id="winRate">0%</div>
+            </div>
+            <div class="card-dark">
+                <div class="title">Avg. Profit</div>
+                <div class="value" id="avgProfit">0%</div>
+            </div>
+            <div class="card-dark negative">
+                <div class="title">Avg. Loss</div>
+                <div class="value" id="avgLoss">0%</div>
+            </div>
+        </div>
+
+        <!-- Add Trade Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add New Trade</h3>
+            </div>
+            <form id="tradeForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pair">Trading Pair</label>
+                        <input type="text" id="pair" placeholder="e.g. BTC/USDT" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="direction">Direction</label>
+                        <select id="direction" required>
+                            <option value="">Select</option>
+                            <option value="long">Long</option>
+                            <option value="short">Short</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pnl">PNL Percentage</label>
+                        <input type="number" id="pnl" step="0.01" placeholder="e.g. 5.25 or -3.50" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes (Optional)</label>
+                    <input type="text" id="notes" placeholder="Any additional notes">
+                </div>
+                <div class="form-group">
+                    <label for="tags">Tags (Optional)</label>
+                    <input type="text" id="tags" placeholder="e.g. Scalp, Swing, Day Trade">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Trade
+                </button>
+            </form>
+        </div>
+
+        <!-- Trade History Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Trade History</h3>
+                <div>
+                    <button id="exportBtn" class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-chips">
+                <span class="chip active" data-filter="all">All Trades</span>
+                <span class="chip" data-filter="win">Wins</span>
+                <span class="chip" data-filter="loss">Losses</span>
+                <span class="chip" data-filter="long">Long</span>
+                <span class="chip" data-filter="short">Short</span>
+            </div>
+
+            <div class="table-container">
+                <table id="tradeTable">
+                    <thead>
+                        <tr>
+                            <th>Pair</th>
+                            <th>Direction</th>
+                            <th>PNL %</th>
+                            <th>Result</th>
+                            <th>Date</th>
+                            <th>Tags</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tradeTableBody">
+                        <!-- Trades will be loaded here -->
+                    </tbody>
+                </table>
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-book-open"></i>
+                    <h3>No trades recorded yet</h3>
+                    <p>Start by adding your first trade</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the app
+            initApp();
+            
+            // Form submission
+            document.getElementById('tradeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addTrade();
+            });
+            
+            // Export button
+            document.getElementById('exportBtn').addEventListener('click', exportTrades);
+            
+            // Set today's date as default
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Set up filter chips
+            document.querySelectorAll('.chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelector('.chip.active').classList.remove('active');
+                    this.classList.add('active');
+                    filterTrades(this.dataset.filter);
+                });
+            });
+        });
+        
+        function initApp() {
+            // Initialize localStorage if empty
+            if (!localStorage.getItem('trades')) {
+                localStorage.setItem('trades', JSON.stringify([]));
+            }
+            
+            // Load trades from localStorage
+            loadTrades();
+            
+            // Update stats
+            updateStats();
+            
+            // Check if there are any trades to show/hide empty state
+            updateEmptyState();
+        }
+        
+        function addTrade() {
+            // Get form values
+            const pair = document.getElementById('pair').value.trim();
+            const direction = document.getElementById('direction').value;
+            const pnl = parseFloat(document.getElementById('pnl').value);
+            const dateInput = document.getElementById('date');
+            const notes = document.getElementById('notes').value.trim();
+            const tags = document.getElementById('tags').value.trim();
+            
+            // Validate required fields
+            if (!pair || !direction || isNaN(pnl) || !dateInput.value) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            // Format date properly for storage
+            const date = new Date(dateInput.value).toISOString().split('T')[0];
+            
+            // Create trade object
+            const trade = {
+                id: Date.now().toString(),
+                pair,
+                direction,
+                pnl,
+                date,
+                notes,
+                tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                timestamp: new Date().toISOString()
+            };
+            
+            // Get existing trades from localStorage
+            let trades = JSON.parse(localStorage.getItem('trades')) || [];
+            
+            // Add new trade
+            trades.unshift(trade);
+            
+            // Save to localStorage
+            localStorage.setItem('trades', JSON.stringify(trades));
+            
+            // Reload the table
+            loadTrades();
+            
+            // Update stats
+            updateStats();
+            
+            // Reset form
+            document.getElementById('tradeForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Show notification
+            showNotification('Trade added successfully!');
+        }
+        
+        function loadTrades(filter = 'all') {
+            const tableBody = document.getElementById('tradeTableBody');
+            const emptyState = document.getElementById('emptyState');
+            tableBody.innerHTML = '';
+            
+            // Get trades from localStorage
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            
+            // Sort by date (newest first)
+            trades.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Filter if needed
+            const filteredTrades = filter === 'all' ? trades : 
+                filter === 'win' ? trades.filter(t => t.pnl >= 0) :
+                filter === 'loss' ? trades.filter(t => t.pnl < 0) :
+                filter === 'long' ? trades.filter(t => t.direction === 'long') :
+                filter === 'short' ? trades.filter(t => t.direction === 'short') : trades;
+            
+            // Add each trade to the table
+            filteredTrades.forEach(trade => {
+                // Determine result and styling
+                const result = trade.pnl >= 0 ? 'Win' : 'Loss';
+                const rowClass = trade.pnl >= 0 ? 'positive' : 'negative';
+                const resultClass = trade.pnl >= 0 ? 'result-positive' : 'result-negative';
+                
+                // Format date for display
+                const displayDate = formatDate(trade.date);
+                
+                // Create table row
+                const row = document.createElement('tr');
+                row.className = rowClass;
+                row.dataset.id = trade.id;
+                
+                row.innerHTML = `
+                    <td>${trade.pair}</td>
+                    <td>${trade.direction.charAt(0).toUpperCase() + trade.direction.slice(1)}</td>
+                    <td>${trade.pnl.toFixed(2)}</td>
+                    <td><span class="result ${resultClass}">${result}</span></td>
+                    <td>${displayDate}</td>
+                    <td>${trade.tags.length > 0 ? trade.tags.join(', ') : '-'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn btn-sm btn-primary edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-negative delete-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to all buttons
+            addEventListeners();
+            
+            // Update empty state visibility
+            updateEmptyState();
+            
+            // Update stats
+            updateStats();
+        }
+        
+        function filterTrades(filter) {
+            loadTrades(filter);
+        }
+        
+        function addEventListeners() {
+            // Edit buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const tradeId = row.dataset.id;
+                    
+                    // Get trades from localStorage
+                    const trades = JSON.parse(localStorage.getItem('trades')) || [];
+                    
+                    // Find the trade to edit
+                    const trade = trades.find(t => t.id === tradeId);
+                    if (!trade) return;
+                    
+                    // Fill form with trade data
+                    document.getElementById('pair').value = trade.pair;
+                    document.getElementById('direction').value = trade.direction;
+                    document.getElementById('pnl').value = trade.pnl;
+                    document.getElementById('date').value = trade.date;
+                    document.getElementById('notes').value = trade.notes || '';
+                    document.getElementById('tags').value = trade.tags.join(', ') || '';
+                    
+                    // Remove the trade from storage
+                    const updatedTrades = trades.filter(t => t.id !== tradeId);
+                    localStorage.setItem('trades', JSON.stringify(updatedTrades));
+                    
+                    // Remove the row
+                    row.remove();
+                    
+                    // Update empty state
+                    updateEmptyState();
+                    
+                    // Update stats
+                    updateStats();
+                    
+                    // Show notification
+                    showNotification('Trade loaded for editing');
+                });
+            });
+            
+            // Delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this trade?')) {
+                        const row = this.closest('tr');
+                        const tradeId = row.dataset.id;
+                        
+                        // Get trades from localStorage
+                        let trades = JSON.parse(localStorage.getItem('trades')) || [];
+                        
+                        // Remove the trade
+                        trades = trades.filter(t => t.id !== tradeId);
+                        localStorage.setItem('trades', JSON.stringify(trades));
+                        
+                        // Remove the row
+                        row.remove();
+                        
+                        // Update empty state
+                        updateEmptyState();
+                        
+                        // Update stats
+                        updateStats();
+                        
+                        // Show notification
+                        showNotification('Trade deleted');
+                    }
+                });
+            });
+        }
+        
+        function updateEmptyState() {
+            const tableBody = document.getElementById('tradeTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (tableBody.children.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+        
+        function updateStats() {
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            const totalTrades = document.getElementById('totalTrades');
+            const winRate = document.getElementById('winRate');
+            const avgProfit = document.getElementById('avgProfit');
+            const avgLoss = document.getElementById('avgLoss');
+            
+            // Total trades
+            totalTrades.textContent = trades.length;
+            
+            if (trades.length > 0) {
+                // Win rate
+                const wins = trades.filter(t => t.pnl >= 0).length;
+                const winRateValue = (wins / trades.length * 100).toFixed(1);
+                winRate.textContent = `${winRateValue}%`;
+                
+                // Average profit
+                const profitableTrades = trades.filter(t => t.pnl > 0);
+                const avgProfitValue = profitableTrades.length > 0 ? 
+                    (profitableTrades.reduce((sum, t) => sum + t.pnl, 0) / profitableTrades.length).toFixed(2) : 0;
+                avgProfit.textContent = `+${avgProfitValue}%`;
+                
+                // Average loss
+                const losingTrades = trades.filter(t => t.pnl < 0);
+                const avgLossValue = losingTrades.length > 0 ? 
+                    (losingTrades.reduce((sum, t) => sum + t.pnl, 0) / losingTrades.length * -1).toFixed(2) : 0;
+                avgLoss.textContent = `-${avgLossValue}%`;
+            } else {
+                winRate.textContent = '0%';
+                avgProfit.textContent = '0%';
+                avgLoss.textContent = '0%';
+            }
+        }
+        
+        function exportTrades() {
+            // Get trades from localStorage
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            
+            if (trades.length === 0) {
+                alert('No trades to export');
+                return;
+            }
+            
+            // Create export content
+            let exportContent = 'Trade Journal Export\n\n';
+            exportContent += 'Date,Pair,Direction,PNL %,Result,Tags,Notes\n';
+            
+            trades.forEach(trade => {
+                const result = trade.pnl >= 0 ? 'Win' : 'Loss';
+                exportContent += `${trade.date},${trade.pair},${trade.direction},${trade.pnl.toFixed(2)}%,${result},"${trade.tags.join(', ')}","${trade.notes || ''}"\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([exportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `trade-journal-export-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Show notification
+            showNotification('Export downloaded!');
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--primary)';
+            notification.style.color = '#121212';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            notification.style.zIndex = '1000';
+            notification.style.transform = 'translateY(100px)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.3s ease';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 10);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateY(100px)';
+                notification.style.opacity = '0';
+                
+                // Remove after animation
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
